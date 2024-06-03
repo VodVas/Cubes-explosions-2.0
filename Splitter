@@ -1,0 +1,51 @@
+using UnityEngine;
+
+public class Splitter : MonoBehaviour
+{
+    [SerializeField] private float _splitChance = 1f;
+
+    private Spawner _spawner;
+    private Rigidbody _rigidbody;
+    private Exploder _exploder;
+
+    private void Awake()
+    {
+        _spawner = GetComponent<Spawner>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _exploder = GetComponent<Exploder>();
+    }
+
+    private void OnMouseDown()
+    {
+        if (Random.value <= _splitChance)
+        {
+            Split();
+        }
+        else
+        {
+            _exploder.ExplodeNonSplitCube();
+        }
+
+        Destroy(gameObject);
+    }
+
+    public void Init(float splitChance, Vector3 newScale, Vector3 oldPosition)
+    {
+        _splitChance = splitChance;
+        transform.localScale = newScale;
+
+        _exploder.ExplodeSplitCubes(_rigidbody, oldPosition);
+    }
+
+    private void Split()
+    {
+        float newSplitChance = _splitChance / 2f;
+        Vector3 newScale = transform.localScale / 2f;
+
+        foreach (var cube in _spawner.SpawnCubes())
+        {
+            cube.transform.localScale = newScale;
+            cube.Init(newSplitChance, newScale, transform.position);
+        }
+    }
+}
