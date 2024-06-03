@@ -1,0 +1,31 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Spawner : MonoBehaviour
+{
+    private Splitter _cubePrefab;
+
+    private int _minQuantityCubes = 2;
+    private int _maxQuantityCubes = 6;
+
+    private void Awake()
+    {
+        _cubePrefab = GetComponent<Splitter>();
+    }
+
+    public IEnumerable<Splitter> SpawnCubes()
+    {
+        int splitCount = Random.Range(_minQuantityCubes, _maxQuantityCubes + 1);
+        float offsetRadius = 0.5f;
+
+        for (int i = 0; i < splitCount; i++)
+        {
+            Vector3 randomOffset = Random.insideUnitSphere * offsetRadius;
+            Vector3 newPosition = transform.position + randomOffset;
+
+            Splitter splitter = Instantiate(_cubePrefab, newPosition, Quaternion.identity);
+
+            yield return splitter;
+        }
+    }
+}
