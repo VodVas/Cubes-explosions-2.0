@@ -1,0 +1,42 @@
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody))]
+
+public class Exploder : MonoBehaviour
+{
+    [SerializeField] private float _explosionForce = 10f;
+    [SerializeField] private float _explosionRadius = 5f;
+    [SerializeField] private float _minExplosionForce = 10f;
+    [SerializeField] private float _maxExplosionForce = 300f;
+
+    private float _scaleMultiplier = 0.2f;
+    private float _initValue = 1f;
+
+    public void ExplodeNonSplitCube()
+    {
+        Vector3 explosionPosition = transform.position;
+
+        float cubeSize = transform.localScale.magnitude;
+        float adjustedRadius = _explosionRadius * (_initValue - _scaleMultiplier * cubeSize);
+        float adjustedForce = _explosionForce * (_initValue + _scaleMultiplier * (_initValue / cubeSize));
+
+        adjustedRadius = Mathf.Max(0f, adjustedRadius);
+        adjustedForce = Mathf.Clamp(adjustedForce, _minExplosionForce, _maxExplosionForce);
+
+        Collider[] colliders = Physics.OverlapSphere(explosionPosition, adjustedRadius);
+
+        foreach (Collider collider in colliders)
+        {
+            Rigidbody otherCube = collider.GetComponent<Rigidbody>();
+
+            Vector3 ExplodeDirection = collider.transform.position - explosionPosition;
+
+            otherCube.AddForce(ExplodeDirection.normalized * adjustedForce, ForceMode.Impulse);
+        }
+    }
+
+    public void ExplodeSplitCubes(Rigidbody rigidbody, Vector3 oldPosition)
+    {
+        rigidbody.AddForce((transform.position - oldPosition).normalized * _explosionForce, ForceMode.Impulse);
+    }
+}
