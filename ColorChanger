@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ColorChanger : MonoBehaviour
 {
-    private Renderer _color;
+    private Renderer _renderer;
 
     private void Start()
     {
-        _color = GetComponent<Renderer>();
+        _renderer = GetComponent<Renderer>();
 
-        _color.material.color = Random.ColorHSV();
+        _renderer.material.color = Random.ColorHSV();
     }
 }
