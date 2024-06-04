@@ -12,7 +12,7 @@ public class Exploder : MonoBehaviour
     private float _scaleMultiplier = 0.2f;
     private float _initValue = 1f;
 
-    public void ExplodeNonSplitCube()
+    public void ExplodeInSphere()
     {
         Vector3 explosionPosition = transform.position;
 
@@ -29,9 +29,9 @@ public class Exploder : MonoBehaviour
         {
             Rigidbody otherCube = collider.GetComponent<Rigidbody>();
 
-            Vector3 ExplodeDirection = collider.transform.position - explosionPosition;
+            Vector3 explodeDirection = collider.transform.position - explosionPosition;
 
-            otherCube.AddForce(ExplodeDirection.normalized * adjustedForce, ForceMode.Impulse);
+            otherCube.AddForce(explodeDirection.normalized * adjustedForce, ForceMode.Impulse);
         }
     }
 
