@@ -23,9 +23,7 @@ public class Spawner : MonoBehaviour
             Vector3 randomOffset = Random.insideUnitSphere * offsetRadius;
             Vector3 newPosition = transform.position + randomOffset;
 
-            Splitter splitter = Instantiate(_cubePrefab, newPosition, Quaternion.identity);
-
-            yield return splitter;
+            yield return Instantiate(_cubePrefab, newPosition, Quaternion.identity);
         }
     }
 }
