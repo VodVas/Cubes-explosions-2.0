@@ -23,7 +23,7 @@ public class Splitter : MonoBehaviour
         }
         else
         {
-            _exploder.ExplodeNonSplitCube();
+            _exploder.ExplodeInSphere();
         }
 
         Destroy(gameObject);
